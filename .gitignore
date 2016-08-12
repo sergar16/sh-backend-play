@@ -1,0 +1,11 @@
+/bin
+/app-2.11
+/target
+/test-2.11
+LICENSE
+README
+/libexec
+/logs
+/.idea
+/project/project
+/project/target
