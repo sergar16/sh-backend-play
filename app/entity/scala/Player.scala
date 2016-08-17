@@ -18,10 +18,10 @@ object Player{
 
 
 // Definition of the SUPPLIERS table
-class Players(tag: Tag) extends Table[(Long, String, String, Long)](tag, "PLAYERS") {
+class Players(tag: Tag) extends Table[Player](tag, "PLAYERS") {
   def id = column[Long]("Player_ID", O.PrimaryKey) // This is the primary key column
   def name = column[String]("Player_NAME")
   def street = column[String]("Player_Surname")
-  def number = column[Long]("Player_Surname")
-  def * = (id, name, street,number)
+  def number = column[Long]("Player_Number")
+  def * = (id, name, street,number) <> ((Player.apply _).tupled, Player.unapply)
 }
