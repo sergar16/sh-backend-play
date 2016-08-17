@@ -18,9 +18,12 @@ libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-slick-evolutions" % "2.0.0"
 )
 
+
 libraryDependencies ++= Seq(
   "com.h2database" % "h2" % "1.4.191"
 )
+
+libraryDependencies += "net.liftweb" %% "lift-json" % "2.6"
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 
@@ -35,3 +38,5 @@ resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 //  "com.typesafe.akka" %% "akka-agent"   % "2.2-M3",
 //  "com.typesafe.akka" %% "akka-testkit" % "2.2-M3" % "test"
 //)
+
+
