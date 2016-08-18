@@ -8,20 +8,31 @@ import scala.concurrent.ExecutionContext.Implicits.global
 /**
   * Created by serhii.hokhkalenko on 2016-08-12.
   */
-case class Player(id: Long,name:String, Surname:String, number: Long ) {
+
+
+
+case class Player(id: Long,userId: Long, name: String, surname: String, number: Long, isDeleted: Boolean = false) extends BaseEntity {
+  implicit val UserFormat = Json.format[User]
 }
 
-object Player{
-  implicit val  playerFormat = Json.format[Player]
-  val players = TableQuery[Players]
+object Players {
+  val players = TableQuery[PlayerTable]
+  lazy val playersTable = new TableQuery(tag => new PlayerTable(tag))
 }
 
 
 // Definition of the SUPPLIERS table
-class Players(tag: Tag) extends Table[Player](tag, "PLAYERS") {
-  def id = column[Long]("Player_ID", O.PrimaryKey) // This is the primary key column
-  def name = column[String]("Player_NAME")
-  def street = column[String]("Player_Surname")
-  def number = column[Long]("Player_Number")
-  def * = (id, name, street,number) <> ((Player.apply _).tupled, Player.unapply)
+class PlayerTable(_tableTag: Tag) extends BaseTable[Player](_tableTag, None, "PLAYERS") {
+  def * = (id,userId, name, surname, number, isDeleted) <> (Player.tupled, Player.unapply)
+
+  def ? = ( Rep.Some(id),Rep.Some(userId),Rep.Some(name), Rep.Some(surname), Rep.Some(number), Rep.Some(isDeleted)).shaped.
+    <>({ r => import r._; _1.map(_ => Player.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get))) },
+      (_: Any) => throw new Exception("Inserting into ? projection not supported."))
+
+  override val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
+  val userId: Rep[Long] = column[Long]("user_id")
+  val name: Rep[String] = column[String]("name", O.Length(150, varying = true))
+  val surname: Rep[String] = column[String]("surname", O.Length(150, varying = true))
+  val number: Rep[Long] = column[Long]("number")
+  override val isDeleted: Rep[Boolean] = column[Boolean]("IsDeleted", O.Default(false))
 }

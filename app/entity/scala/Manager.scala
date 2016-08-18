@@ -7,6 +7,6 @@ import play.api.libs.json.Json
   */
 case class Manager(name: String)
 
-object Manager{
+object Managers{
   implicit val  playerFormat = Json.format[Manager]
 }

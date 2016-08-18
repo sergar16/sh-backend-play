@@ -1,7 +1,7 @@
-package repository
+package repository.generic
+
 import entity.scala.{BaseEntity, BaseTable}
-import slick.lifted.{CanBeQueryCondition, Rep, Tag}
-import slick.driver.H2Driver.api._
+import slick.lifted.{CanBeQueryCondition, Rep}
 
 import scala.concurrent.Future
 /**
