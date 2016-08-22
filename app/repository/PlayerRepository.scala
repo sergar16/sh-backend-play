@@ -11,8 +11,8 @@ import scala.concurrent.Future
   */
 class PlayerRepository extends BaseRepository[PlayerTable, Player](TableQuery[PlayerTable]) {
 
-  def getPlayersByUserId(userId: Long): Future[Seq[Player]] = {
-    filter(_.userId === userId)
+  def getPlayersByTeamId(teamId: Long): Future[Seq[Player]] = {
+    filter(_.teamId === teamId)
   }
 
 }

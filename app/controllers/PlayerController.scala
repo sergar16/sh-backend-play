@@ -1,47 +1,47 @@
 package controllers
-import com.fasterxml.jackson.annotation.JsonValue
-import play.api.{db, _}
-import play.api.mvc._
-import services.Counter
-import play.api.libs.json._
-import entity.scala.{Player, Players, User, Users}
-import slick.driver.H2Driver.api._
-import akka._
-import akka.actor.FSM.Failure
-import akka.actor.Status.Success
-import akka.actor.ActorSystem
-import javax.inject._
 
+import entity.scala._
+import slick.driver.H2Driver.api._
 import net.liftweb.json._
 import play.api._
+import javax.inject._
+
+import akka.actor.ActorSystem
 import play.api.mvc._
 
-import scala.concurrent.{ExecutionContext, Future, Promise}
-import scala.concurrent.duration._
-import scala.None
-import scala.concurrent.{Await, Future}
+import scala.concurrent.{Await, ExecutionContext, Future, Promise}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 import repository.{PlayerRepository, UserRepository}
 import net.liftweb.json.Serialization.write
+
 /**
   * Created by serhii.hokhkalenko on 2016-08-12.
   */
-class FootballController extends Controller{
+class PlayerController extends Controller{
   val db = Database.forConfig("h2mem1")
-  val players =Players.players;
   val users = Users.users;
+  val profiles=Profiles.profiles
+  val profilesTeams=ProfileTeams.profilesTeams
+  val teams = Teams.teams;
+  val players =Players.players;
 
   val setup = DBIO.seq(
     // Create the tables, including primary and foreign keys
-    (players.schema).create,
-    (users.schema).create,
-    players +=Player(1,1, "Mesut", "Ozil", 11,false),
-    players +=Player(2, 1,"Alexis", "Sanches", 17,false),
-    players +=Player(3, 2,"Jack", "Wilshere", 10,false),
+   (users.schema++profiles.schema++profilesTeams.schema++teams.schema++players.schema).create,
+    users+= User(1,"sergar16", "serhii.hokhkalenko@gmail.com","1111"),
 
-      users +=User(1,"pandafx","pandafx@gmail.com","1111", false),
-      users +=User(2,"sergar16","serhii.hokhkalenko@gmail.com","1111", false)
+    profiles+=Profile(1, 1,"sergar16", false),
+
+    profilesTeams+=ProfileTeam(1,1),
+
+    teams+=Team(1,"Arsenal Serhii", 1,1),
+
+    players+=Player(1,1,"Mesut", "Ozil", 11),
+    players+=Player(2,1,"Alexis", "Sanches", 7),
+    players+=Player(2,1,"Laurent", "Koscielny", 6)
+
+
   )
   val setupFuture = Await.result(db.run(setup), 10.seconds)
 
@@ -50,7 +50,7 @@ class FootballController extends Controller{
 
   def football = Action.async {
     val playerRepository= new PlayerRepository
-    playerRepository.getPlayersByUserId(1).map {
+    playerRepository.getPlayersByTeamId(1).map {
       case players => Ok(write(players))
     }
   }
