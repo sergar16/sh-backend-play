@@ -29,6 +29,10 @@ abstract class BaseRepository[T <: BaseTable[E], E <: BaseEntity : ClassTag](cla
     db.run(filterQuery(expr).result)
   }
 
+  def filterSingleResult[C <: Rep[_]](expr: T => C)(implicit wt: CanBeQueryCondition[C]) = {
+    db.run(filterQuery(expr).result.headOption)
+  }
+
   def save(row: E) = {
     db.run(saveQuery(row))
   }

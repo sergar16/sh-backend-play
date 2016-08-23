@@ -16,3 +16,4 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 
 GET     /football              controllers.PlayerController.football
 GET     /user              controllers.PlayerController.user
+GET     /auth/:login/:password              controllers.AuthController.auth(login:String,password:String)
