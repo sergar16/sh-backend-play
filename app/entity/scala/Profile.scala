@@ -6,7 +6,7 @@ import slick.driver.H2Driver.api._
 /**
   * Created by Serhii.Hokhkalenko on 2016-08-22.
   */
-case class Profile(id: Long, profileTeamsId: Long, nickName: String, isDeleted: Boolean = false) extends BaseEntity {
+case class Profile(id: Long,userId:Long, profileTeamsId: Long, nickName: String, isDeleted: Boolean = false) extends BaseEntity {
   implicit val ProfileFormat = Json.format[Profile]
 }
 
@@ -17,13 +17,14 @@ object Profiles {
 
 
 class ProfileTable(_tableTag: Tag) extends BaseTable[Profile](_tableTag, None, "Profile") {
-  def * = (id, profileTeamsId, nickName, isDeleted) <>(Profile.tupled, Profile.unapply)
+  def * = (id,userId, profileTeamsId, nickName, isDeleted) <>(Profile.tupled, Profile.unapply)
 
-  def ? = (Rep.Some(id), Rep.Some(profileTeamsId), Rep.Some(nickName), Rep.Some(isDeleted)).shaped.
-    <>({ r => import r._; _1.map(_ => Profile.tupled((_1.get, _2.get, _3.get, _4.get))) },
+  def ? = (Rep.Some(id),Rep.Some(userId), Rep.Some(profileTeamsId), Rep.Some(nickName), Rep.Some(isDeleted)).shaped.
+    <>({ r => import r._; _1.map(_ => Profile.tupled((_1.get, _2.get, _3.get, _4.get,_5.get))) },
       (_: Any) => throw new Exception("Inserting into ? projection not supported."))
 
   override val id: Rep[Long] = column[Long]("ProfileId", O.AutoInc, O.PrimaryKey)
+  val userId: Rep[Long] = column[Long]("UserId")
   val nickName: Rep[String] = column[String]("ProfileName", O.Length(150, varying = true))
   val profileTeamsId: Rep[Long] = column[Long]("profileTeamsId")
   override val isDeleted: Rep[Boolean] = column[Boolean]("IsDeleted", O.Default(false))

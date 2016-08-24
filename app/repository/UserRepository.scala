@@ -1,9 +1,10 @@
 package repository
 
-import entity.scala.{Player, User, UserTable, Users}
+import entity.scala._
 import repository.generic.BaseRepository
 import slick.lifted.TableQuery
 import slick.driver.H2Driver.api._
+
 
 import scala.concurrent.Future
 
@@ -14,4 +15,8 @@ class UserRepository extends BaseRepository[UserTable, User](TableQuery[UserTabl
    def getByLogin(login: String): Future[Option[User]] = {
     filterSingleResult(_.login === login)
   }
+  def getByEmail(login: String): Future[Option[User]] = {
+    filterSingleResult(_.email === login)
+  }
+
 }

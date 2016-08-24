@@ -31,7 +31,7 @@ class PlayerController extends Controller{
    (users.schema++profiles.schema++profilesTeams.schema++teams.schema++players.schema).create,
     users+= User(1,"sergar16", "serhii.hokhkalenko@gmail.com","1111"),
 
-    profiles+=Profile(1, 1,"sergar16", false),
+    profiles+=Profile(1,1, 1,"sergar16", false),
 
     profilesTeams+=ProfileTeam(1,1),
 
