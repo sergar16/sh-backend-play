@@ -4,4 +4,3 @@
 
 GET     /user              controllers.UserController.user
 GET     /auth/:login/:password              controllers.AuthController.auth(login:String,password:String)
-GET     /generic             controllers.UserController.generic
