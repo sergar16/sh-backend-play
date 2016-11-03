@@ -16,7 +16,6 @@ object Users {
 }
 
 
-// Definition of the SUPPLIERS table
 class UserTable(_tableTag: Tag) extends BaseTable[User](_tableTag, None, "User") {
   def * = (id, login, email, password, isDeleted) <> (User.tupled, User.unapply)
 

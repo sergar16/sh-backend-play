@@ -4,6 +4,8 @@ import services.AuthService
 import javax.inject._
 
 import akka.actor.ActorSystem
+import entity.scala.User
+import net.liftweb.json.DefaultFormats
 import play.api.mvc._
 
 import scala.concurrent.{Await, ExecutionContext, Future, Promise}
@@ -16,12 +18,13 @@ import net.liftweb.json.Serialization.write
 
   @Singleton
   class AuthController @Inject()(actorSystem: ActorSystem,authService: AuthService)(implicit exec: ExecutionContext) extends Controller {
+  implicit val formats = DefaultFormats
 
     def auth(login: String, password: String) = Action.async {
       implicit request => {
         authService.auth(login, password).map {
-          case true => Ok("succcesss")
-          case false => Forbidden("failed")
+          case  Some(user) => Ok(write(user))
+          case _ => Forbidden("failed")
         }
       }
     }

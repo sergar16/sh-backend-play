@@ -15,8 +15,12 @@ class UserRepository extends BaseRepository[UserTable, User](TableQuery[UserTabl
    def getByLogin(login: String): Future[Option[User]] = {
     filterSingleResult(_.login === login)
   }
+
   def getByEmail(login: String): Future[Option[User]] = {
     filterSingleResult(_.email === login)
   }
 
+  def getByLoginAndPassword(login:String,password:String): Future[Option[User]] = {
+   filterSingleResult(_.email === login)
+  }
 }
