@@ -4,3 +4,4 @@
 
 GET     /user              controllers.UserController.user
 GET     /auth/:login/:password              controllers.AuthController.auth(login:String,password:String)
+POST    /user/add/:user                         controllers.UserController.addUser(user: User)

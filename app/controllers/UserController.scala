@@ -48,6 +48,38 @@ class UserController @Inject()(actorSystem: ActorSystem, cached: Cached, userSer
     }
   }
 
+  /**
+    * This method adding new user
+    *
+    * @param user
+    * @return
+    */
+  def addUser(user: User) = Action(parse.json) {
+    request => {
+      userService.addUser(user)
+      Ok(write(user))
+    }
+  }
+
+  /**
+    * This method updating user
+    *
+    * @param user
+    * @return
+    */
+  def updateUser(user: User) = Action(parse.json) {
+    request => {
+      userService.updateUser(user)
+      Ok(write(user))
+    }
+  }
+
+  /**
+    * This method deleting user by id
+    *
+    * @param id
+    * @return
+    */
   def deleteUser(id: Int) = {
     userService.deleteUser(id)
   }
