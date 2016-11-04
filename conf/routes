@@ -3,5 +3,8 @@
 # ~~~~
 
 GET     /user              controllers.UserController.user
+GET    /user/getAll                        controllers.UserController.getAll
 GET     /auth/:login/:password              controllers.AuthController.auth(login:String,password:String)
-POST    /user/add/:user                         controllers.UserController.addUser(user: User)
+POST    /user/add                        controllers.UserController.addUser
+POST    /user/update                        controllers.UserController.updateUser
+#POST    /user/delete/:id                        controllers.UserController.deleteUser(id:Int)

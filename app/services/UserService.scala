@@ -47,4 +47,8 @@ class UserService @Inject()(userRepository: UserRepository)(implicit exec: Execu
     userRepository.deleteById(id)
   }
 
+  def getAllUsers:Future[Seq[User]]={
+    userRepository.getAllUsers()
+  }
+
 }

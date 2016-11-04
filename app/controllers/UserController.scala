@@ -8,6 +8,7 @@ import entity.scala.User
 import net.liftweb.json.DefaultFormats
 import net.liftweb.json.Serialization.write
 import play.api.cache.Cached
+import play.api.libs.json.{JsError, Json}
 import play.api.mvc._
 import repository.UserRepository
 import services.UserService
@@ -26,6 +27,7 @@ class UserController @Inject()(actorSystem: ActorSystem, cached: Cached, userSer
   UserRepository.initDb()
 
   implicit val formats = DefaultFormats
+  implicit val userReads = Json.reads[User]
 
   def user = Action.async {
     userService.getById(1).map {
@@ -51,28 +53,47 @@ class UserController @Inject()(actorSystem: ActorSystem, cached: Cached, userSer
   /**
     * This method adding new user
     *
-    * @param user
     * @return
     */
-  def addUser(user: User) = Action(parse.json) {
-    request => {
-      userService.addUser(user)
-      Ok(write(user))
-    }
+  def addUser = Action(parse.json) {
+    request =>
+      val userResult = request.body.validate[User]
+      userResult.fold(
+        errors => {
+          BadRequest(Json.obj("status" ->"KO", "message" -> JsError.toJson(errors)))
+        },
+        user => {
+          userService.addUser(user)
+          Ok(Json.obj("status" ->"OK", "message" -> ("User '"+user.login+"' saved.") ))
+        }
+      )
   }
 
   /**
     * This method updating user
     *
-    * @param user
     * @return
     */
-  def updateUser(user: User) = Action(parse.json) {
-    request => {
-      userService.updateUser(user)
-      Ok(write(user))
+  def updateUser() = Action(parse.json){
+    request =>
+      val userResult = request.body.validate[User]
+      userResult.fold(
+        errors => {
+          BadRequest(Json.obj("status" ->"KO", "message" -> JsError.toJson(errors)))
+        },
+        user => {
+          userService.updateUser(user)
+          Ok(Json.obj("status" ->"OK", "message" -> ("User '"+user.login+"' saved.") ))
+        }
+      )
+  }
+
+  def getAll()=Action.async {
+    userService.getAllUsers.map {
+      case users => Ok(write(users))
     }
   }
+
 
   /**
     * This method deleting user by id

@@ -7,6 +7,7 @@ import slick.driver.H2Driver.api._
   * Created by serhii.hokhkalenko on 2016-08-12.
   */
 case class User(id: Long, login: String, email: String, password: String, isDeleted: Boolean = false) extends BaseEntity {
+  implicit val userReads = Json.reads[User]
   implicit val UserFormat = Json.format[User]
 }
 
