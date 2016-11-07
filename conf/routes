@@ -3,8 +3,19 @@
 # ~~~~
 
 GET     /user              controllers.UserController.user
-GET    /user/getAll                        controllers.UserController.getAll
-GET     /auth/:login/:password              controllers.AuthController.auth(login:String,password:String)
+GET     /user/getById/:id              controllers.UserController.userById(id:Long)
+GET    /user/all                       controllers.UserController.getAll
 POST    /user/add                        controllers.UserController.addUser
 POST    /user/update                        controllers.UserController.updateUser
-#POST    /user/delete/:id                        controllers.UserController.deleteUser(id:Int)
+#POST    /user/delete/:id                        controllers.UserController.deleteUser(id:Long)
+
+
+GET     /user/:userId/profile              controllers.ProfileController.getUsersProfileById(userId:Long)
+GET     /user/profile/getById/:id              controllers.ProfileController.profileById(id:Long)
+GET    /user/profile/all                       controllers.ProfileController.getAll
+POST    /user/profile/add                        controllers.ProfileController.addProfile
+POST    /user/profile/update                        controllers.ProfileController.updateProfile
+#POST    /user/profile/delete/:id                        controllers.ProfileController.deleteProfile(id:Long)
+
+
+GET     /auth/:login/:password              controllers.AuthController.auth(login:String,password:String)

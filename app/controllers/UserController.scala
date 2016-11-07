@@ -24,14 +24,15 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class UserController @Inject()(actorSystem: ActorSystem, cached: Cached, userService: UserService)(implicit exec: ExecutionContext) extends Controller {
 
   //todo: remove it
-  UserRepository.initDb()
+    UserRepository.initDb()
 
   implicit val formats = DefaultFormats
   implicit val userReads = Json.reads[User]
 
   def user = Action.async {
     userService.getById(1).map {
-      case user => Ok(write(user.get))
+      case Some(u) => Ok(write(u))
+      case None => Forbidden(Json.obj("status" -> "KO", "message" -> ("User is not exist.")))
     }
   }
 
@@ -42,10 +43,11 @@ class UserController @Inject()(actorSystem: ActorSystem, cached: Cached, userSer
     * @param id
     * @return -user
     */
-  def userById(id: Int) = cached("user" + id) {
+  def userById(id: Long) = cached("user" + id) {
     Action.async {
       userService.getById(id).map {
-        case user => Ok(write(user.get))
+        case Some(u) => Ok(write(u))
+        case None => Forbidden(Json.obj("status" -> "KO", "message" -> ("User with id= '" + id + "' is not exist.")))
       }
     }
   }
@@ -88,7 +90,7 @@ class UserController @Inject()(actorSystem: ActorSystem, cached: Cached, userSer
       )
   }
 
-  def getAll()=Action.async {
+  def getAll = Action.async {
     userService.getAllUsers.map {
       case users => Ok(write(users))
     }
@@ -101,18 +103,10 @@ class UserController @Inject()(actorSystem: ActorSystem, cached: Cached, userSer
     * @param id
     * @return
     */
-  def deleteUser(id: Int) = {
+  def deleteUser(id: Long) = {
     userService.deleteUser(id)
   }
 
-  //  def userProfile = Authenticated {
-  //    user =>
-  //      cached(req => "profile." + user) {
-  //        Action {
-  //          Ok(views.html.profile(User.find(user)))
-  //        }
-  //      }
-  //  }
 
 
 }

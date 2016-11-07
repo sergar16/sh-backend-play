@@ -4,8 +4,8 @@ import entity.scala._
 import repository.generic.BaseRepository
 import slick.lifted.TableQuery
 import slick.driver.H2Driver.api._
-import scala.concurrent.duration._
 
+import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
 
 /**
@@ -35,12 +35,14 @@ object UserRepository{
     val db = Database.forConfig("h2mem1")
 
     val users = Users.users;
+    val profiles = Profiles.profiles;
 
 
     val setup = DBIO.seq(
       // Create the tables, including primary and foreign keys
-      (users.schema).create,
-      users+= User(1,"sergar16", "serhii.hokhkalenko@gmail.com","1111")
+      (users.schema++profiles.schema).create,
+      profiles+= Profile(1,"Serhii","Hokhkalenko","+3900","324234","234234","rwerwe"),
+        users+= User(1,1,"sergar16", "serhii.hokhkalenko@gmail.com","1111")
     )
     val setupFuture = Await.result(db.run(setup), 10.seconds)
 

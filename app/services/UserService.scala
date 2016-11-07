@@ -16,7 +16,7 @@ class UserService @Inject()(userRepository: UserRepository)(implicit exec: Execu
     * @param id
     * @return
     */
-  def getById(id:Int):Future[Option[User]]={
+  def getById(id:Long):Future[Option[User]]={
     userRepository.getById(id)
   }
 
@@ -43,12 +43,12 @@ class UserService @Inject()(userRepository: UserRepository)(implicit exec: Execu
     *
     * @param id
     */
-  def deleteUser(id:Int){
+  def deleteUser(id:Long){
     userRepository.deleteById(id)
   }
 
   def getAllUsers:Future[Seq[User]]={
-    userRepository.getAllUsers()
+    userRepository.getAll
   }
 
 }
