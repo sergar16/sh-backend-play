@@ -8,13 +8,13 @@ import slick.driver.H2Driver.api._
   * Created by serhii.hokhkalenko on 2016-11-07.
   */
 case class UsersFriends(id: Long, userId: Long, userFriendId: Long, isDeleted: Boolean = false) extends BaseEntity {
-  implicit val UsersFriendsReads = Json.reads[UsersFriends]
-  implicit val UsersFriendsFormat = Json.format[UsersFriends]
+  implicit val usersFriendsReads = Json.reads[UsersFriends]
+  implicit val usersFriendsFormat = Json.format[UsersFriends]
 }
 
 object UsersFriendss {
-  val UsersFriendss = TableQuery[UsersFriendsTable]
-  lazy val UsersFriendsTable = new TableQuery(tag => new UsersFriendsTable(tag))
+  val usersFriendss = TableQuery[UsersFriendsTable]
+  lazy val usersFriendsTable = new TableQuery(tag => new UsersFriendsTable(tag))
 }
 
 
